@@ -21,7 +21,7 @@ export function ChatSidebar({ isOpen, onToggle, isHovering, setIsHovering, sideb
     { icon: MessageSquare, label: "New chat", id: "new-chat" },
     { icon: History, label: "History", id: "history" },
     { icon: Settings, label: "Settings", id: "settings" },
-    { icon: Info, label: "No About", id: "about" },
+    { icon: Info, label: "About", id: "about" },
   ]
 
   return (

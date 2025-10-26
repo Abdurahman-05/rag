@@ -260,7 +260,7 @@ import apiClient from "@/lib/api-client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { LogOut } from "lucide-react";
+import { LogOut, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function UploadPage() {
@@ -382,6 +382,15 @@ export default function UploadPage() {
             <Button type="submit" disabled={loading} className="w-full">
               {loading ? "Uploading..." : "Submit"}
             </Button>
+            <Button
+                type="button"
+                onClick={() => router.push("/chat")}
+                variant="secondary"
+                className="w-full flex items-center justify-center gap-2"
+              >
+                <MessageSquare className="w-4 h-4" />
+                Go to Chatbot
+              </Button>
 
             {message && (
               <p
