@@ -1,6 +1,6 @@
 import express from "express";
 import { VoyageAIClient } from "voyageai";
-import { embeddingData } from "../models/user.js";
+import { embeddingData } from "../models/embed.js";
 import { genController } from "./genAi.js";
 
 const uploadController = async (req, res) => {
@@ -21,6 +21,7 @@ const uploadController = async (req, res) => {
     const embedding = new embeddingData({
       text: text,
       embedding: embed.data[0].embedding,
+      user: req.user._id,
     });
     await embedding.save();
     console.log("Embedding result:", embed);
@@ -28,6 +29,7 @@ const uploadController = async (req, res) => {
     res.status(200).json({
       message: "Text embedded and saved successfully",
       data: embedding,
+      
     });
   } catch (error) {
     console.error("Error in uploadController:", error);
@@ -66,6 +68,7 @@ const searchController = async (req, res) => {
       {
         $project: {
           text: 1,
+          user: 1,
           _id: 0,
           score: { $meta: "vectorSearchScore" },
         },
@@ -73,6 +76,7 @@ const searchController = async (req, res) => {
       {
         $match: {
           score: { $gte: 0.65 },
+          user: req.user._id,
         },
       },
     ]);
