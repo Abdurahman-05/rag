@@ -18,7 +18,7 @@ export function HeroSection() {
               satisfaction and reducing response times.
             </p>
             <div>
-              <Link href="/chat">
+              <Link href="/upload">
                 <Button
                   size="lg"
                   className="text-base  transform transition duration-300 ease-in-out 

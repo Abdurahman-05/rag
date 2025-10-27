@@ -263,6 +263,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { LogOut, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+
+
 export default function UploadPage() {
   const [text, setText] = useState("");
   const [message, setMessage] = useState("");
@@ -330,17 +332,6 @@ export default function UploadPage() {
     }
   };
 
-  // ✅ Loading state
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gray-50">
@@ -379,9 +370,10 @@ export default function UploadPage() {
               className="resize-none mt-2"
             />
 
-            <Button type="submit" disabled={loading} className="w-full">
+             <Button type="submit" disabled={loading} className="w-full"> 
               {loading ? "Uploading..." : "Submit"}
-            </Button>
+            
+            </Button> 
             <Button
                 type="button"
                 onClick={() => router.push("/chat")}
