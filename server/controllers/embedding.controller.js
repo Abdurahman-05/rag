@@ -1,7 +1,9 @@
 import express from "express";
 import { VoyageAIClient } from "voyageai";
 import { embeddingData } from "../models/embed.js";
-import { genController } from "./genAi.js";
+import { genController, semanticChunks } from "./genAi.js";
+import { chunkit } from "semantic-chunking";
+
 
 const uploadController = async (req, res) => {
   try {
@@ -10,6 +12,9 @@ const uploadController = async (req, res) => {
     if (!text) {
       return res.status(400).json({ error: "No data received" });
     }
+
+    
+ 
 
     const client = new VoyageAIClient({ apiKey: process.env.VOYAGEAI_API_KEY });
 
@@ -21,15 +26,13 @@ const uploadController = async (req, res) => {
     const embedding = new embeddingData({
       text: text,
       embedding: embed.data[0].embedding,
-      user: req.user._id,
     });
     await embedding.save();
     console.log("Embedding result:", embed);
 
     res.status(200).json({
       message: "Text embedded and saved successfully",
-      data: embedding,
-      
+      data: myFrogChunks,
     });
   } catch (error) {
     console.error("Error in uploadController:", error);
@@ -39,6 +42,7 @@ const uploadController = async (req, res) => {
     });
   }
 };
+
 const searchController = async (req, res) => {
   try {
     const { text } = req.body;
@@ -68,7 +72,6 @@ const searchController = async (req, res) => {
       {
         $project: {
           text: 1,
-          user: 1,
           _id: 0,
           score: { $meta: "vectorSearchScore" },
         },
@@ -76,7 +79,6 @@ const searchController = async (req, res) => {
       {
         $match: {
           score: { $gte: 0.65 },
-          user: req.user._id,
         },
       },
     ]);
