@@ -17,20 +17,41 @@ export const semanticChunks = async (context) => {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: `
-You are an expert in semantic text chunking and document preprocessing for AI retrieval.
+You are an expert in semantic text chunking.
 
 Task:
-Split the text into meaningful chunks with metadata. 
-Each chunk should keep full context and not break sentences.
+Split the following text into meaningful chunks. Each chunk should keep full context and not break sentences.
 
-Rules:
-- Each chunk must be semantically complete.
-- Average length: 100–200 wordsrs
-.
-- Include metadata: id, source, start_index, end_index, word_count, summary, and chunk.
-- Respond with PURE JSON only. Do NOT include markdown formatting, explanations, or code fences.
+Requirements:
+- Return ONLY JSON.
+- Each object must have:
+  - "text": the chunk content
+  - "metadata": an object containing ONLY your custom fields (e.g., keyWords)
+- Do NOT include code fences, explanations, or extra fields.
+- Average chunk length: 100–200 words, adjust naturally.
 
-Text:
+Example:
+
+Input Text:
+"Technology has changed the world in ways that were once unimaginable. AI tools are being used to write code, compose music, and even diagnose medical conditions with impressive accuracy. Education is also being transformed with online platforms and hybrid learning methods."
+
+Expected Output:
+[
+  {
+    "text": "Technology has changed the world in ways that were once unimaginable. AI tools are being used to write code, compose music, and even diagnose medical conditions with impressive accuracy.",
+    "metadata": {
+      "keyWords": ["technology", "AI", "innovation"]
+    }
+  },
+  {
+    "text": "Education is also being transformed with online platforms and hybrid learning methods.",
+    "metadata": {
+      "keyWords": ["education", "online learning", "hybrid model"]
+    }
+  }
+]
+
+Text to Chunk:
 ${context}
 `,
   });

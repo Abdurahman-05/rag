@@ -2,8 +2,7 @@ import express from "express";
 import { VoyageAIClient } from "voyageai";
 import { embeddingData } from "../models/embed.js";
 import { genController, semanticChunks } from "./genAi.js";
-import { chunkit } from "semantic-chunking";
-
+import { slideWindowChunking } from "./chunking.js";
 
 const uploadController = async (req, res) => {
   try {
@@ -13,26 +12,28 @@ const uploadController = async (req, res) => {
       return res.status(400).json({ error: "No data received" });
     }
 
-    
- 
+    // const chunks = slideWindowChunking(text);
+    const semanticChunkedData = await semanticChunks(text);
+    const chunkedData = semanticChunkedData.json();
+    console.log("Semantic Chunked Data:", chunkedData);
 
-    const client = new VoyageAIClient({ apiKey: process.env.VOYAGEAI_API_KEY });
+    // const client = new VoyageAIClient({ apiKey: process.env.VOYAGEAI_API_KEY });
 
-    const embed = await client.embed({
-      input: text,
-      model: "voyage-3-large",
-    });
+    // const embed = await client.embed({
+    //   input: text,
+    //   model: "voyage-3-large",
+    // });
 
-    const embedding = new embeddingData({
-      text: text,
-      embedding: embed.data[0].embedding,
-    });
-    await embedding.save();
-    console.log("Embedding result:", embed);
+    // const embedding = new embeddingData({
+    //   text: text,
+    //   embedding: embed.data[0].embedding,
+    // });
+    // await embedding.save();
+    // console.log("Embedding result:", embed);
 
     res.status(200).json({
       message: "Text embedded and saved successfully",
-      data: myFrogChunks,
+      data: chunkedData,
     });
   } catch (error) {
     console.error("Error in uploadController:", error);
